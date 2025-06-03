@@ -20,6 +20,17 @@ function listarProdutos() {
     .then(res => res.json())
     .then(produtos => {
       const div = document.getElementById('produtos');
-      div.innerHTML = produtos.map(p => `<p>${p.nome} - R$ ${p.preco}</p>`).join('');
+      div.innerHTML = produtos.map(p => `
+        <div>
+          <p>${p.nome} - R$ ${p.preco}</p>
+          <button onclick="deletarProduto('${p._id}')">Deletar</button>
+        </div>
+      `).join('');
     });
 }
+
+function deletarProduto(id) {
+  fetch(`http://localhost:3000/api/produtos/${id}`, { method: 'DELETE' })
+    .then(() => listarProdutos());
+}
+
