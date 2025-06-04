@@ -28,10 +28,42 @@ function listarProdutos() {
         <div>
           <p>${p.nome} - R$ ${p.preco}</p>
           <button onclick="deletarProduto('${p._id}')">Deletar</button>
+          <button onclick="mostrarFormularioEdicao('${p._id}', '${p.nome}', '${p.descricao}', '${p.preco}')">Editar</button>
         </div>
       `).join('');
     });
 }
+function mostrarFormularioEdicao(id, nome, descricao, preco) {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <h2>Editar Produto</h2>
+    <input id="nome" value="${nome}" placeholder="Nome"><br>
+    <input id="descricao" value="${descricao}" placeholder="Descrição"><br>
+    <input id="preco" value="${preco}" placeholder="Preço" type="number"><br>
+    <button onclick="editarProduto('${id}')">Salvar</button>
+    <br>
+    <button onclick="window.location.hash = '#/produtos'">Voltar</button>
+  `;
+}
+
+function editarProduto(id) {
+  const nome = document.getElementById('nome').value;
+  const descricao = document.getElementById('descricao').value;
+  const preco = parseFloat(document.getElementById('preco').value);
+
+  fetch(`http://localhost:3000/api/produtos/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ nome, descricao, preco })
+  })
+    .then(() => {
+      alert('Produto atualizado com sucesso!');
+      window.location.hash = '#/produtos';
+    });
+}
+
 
 function deletarProduto(id) {
   fetch(`http://localhost:3000/api/deleteprodutos/${id}`, { method: 'DELETE' })
@@ -63,8 +95,8 @@ function criarProduto() {
     },
     body: JSON.stringify({ nome, descricao, preco })
   })
-  .then(() => {
-    alert('Produto criado com sucesso!');
-    window.location.hash = '#/produtos';
-  });
+    .then(() => {
+      alert('Produto criado com sucesso!');
+      window.location.hash = '#/produtos';
+    });
 }
