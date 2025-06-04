@@ -12,7 +12,12 @@ mongoose.connect('mongodb+srv://evertonprogramadorcriativo:roqiAePQ0uVsYPNr@clus
 app.use(cors());
 app.use(express.json());
 
-const routes = require('./routes');
-app.use('/api', routes);
+ 
+const routesProdutos = require('./routes');
+const routesUser = require('./routesUser');
+
+app.use('/api', routesProdutos);
+app.use('/api', routesUser);
+
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'));

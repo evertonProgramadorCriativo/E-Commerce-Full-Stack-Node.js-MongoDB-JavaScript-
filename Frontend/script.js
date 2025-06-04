@@ -9,9 +9,21 @@ function router() {
       <div id="produtos"></div>
     `;
     listarProdutos();
-  } else if (route === '#/login') {
-    app.innerHTML = '<h2>Login</h2><input placeholder="Usuário"/><br><input type="password" placeholder="Senha"/>';
-  } else {
+  }else if (route === '#/login') {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <h2>Login</h2>
+    <input id="usuario" placeholder="Usuário"/><br>
+    <input id="senha" type="password" placeholder="Senha"/><br>
+    <button onclick="login()">Entrar</button>
+    <br>
+    <h2>Registrar</h2>
+    <input id="usuarioReg" placeholder="Usuário"/><br>
+    <input id="senhaReg" type="password" placeholder="Senha"/><br>
+    <button onclick="registrar()">Registrar</button>
+  `;
+}
+else {
     app.innerHTML = '<h2>Bem-vindo ao E-commerce</h2>';
   }
 }
@@ -99,4 +111,30 @@ function criarProduto() {
       alert('Produto criado com sucesso!');
       window.location.hash = '#/produtos';
     });
+}
+
+function login() {
+  const usuario = document.getElementById('usuario').value;
+  const senha = document.getElementById('senha').value;
+
+  fetch('http://localhost:3000/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ usuario, senha })
+  })
+  .then(res => res.json())
+  .then(data => alert(data.mensagem));
+}
+
+function registrar() {
+  const usuario = document.getElementById('usuarioReg').value;
+  const senha = document.getElementById('senhaReg').value;
+
+  fetch('http://localhost:3000/api/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ usuario, senha })
+  })
+  .then(res => res.json())
+  .then(data => alert(data.mensagem));
 }
