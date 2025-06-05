@@ -1,5 +1,9 @@
 const Usuario = require('./models/User');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+ 
+const SECRET = 'dsdlskakldsjaildsaldjsajdlsajdiasjdldsa';
 
 exports.registrarUsuario = async (req, res) => {
   const { usuario, senha } = req.body;
@@ -28,5 +32,8 @@ exports.loginUsuario = async (req, res) => {
     return res.status(400).json({ mensagem: 'Senha inválida!' });
   }
 
-  res.json({ mensagem: 'Login realizado com sucesso!' });
+ 
+  const token = jwt.sign({ id: user._id }, SECRET, { expiresIn: '1h' });
+
+  res.json({ mensagem: 'Login realizado com sucesso!', token });
 };

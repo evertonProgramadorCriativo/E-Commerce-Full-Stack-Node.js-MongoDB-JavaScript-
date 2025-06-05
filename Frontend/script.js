@@ -94,26 +94,30 @@ function mostrarFormularioCriacao() {
     <button onclick="window.location.hash = '#/produtos'">Voltar</button>
   `;
 }
-
+ 
 function criarProduto() {
   const nome = document.getElementById('nome').value;
   const descricao = document.getElementById('descricao').value;
   const preco = parseFloat(document.getElementById('preco').value);
 
+  const token = localStorage.getItem('token');
+
   fetch('http://localhost:3000/api/createprodutos', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify({ nome, descricao, preco })
   })
-    .then(() => {
-      alert('Produto criado com sucesso!');
-      window.location.hash = '#/produtos';
-    });
+  .then(() => {
+    alert('Produto criado com sucesso!');
+    window.location.hash = '#/produtos';
+  });
 }
 
-function login() {
+
+ function login() {
   const usuario = document.getElementById('usuario').value;
   const senha = document.getElementById('senha').value;
 
@@ -123,8 +127,14 @@ function login() {
     body: JSON.stringify({ usuario, senha })
   })
   .then(res => res.json())
-  .then(data => alert(data.mensagem));
+  .then(data => {
+    alert(data.mensagem);
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+    }
+  });
 }
+
 
 function registrar() {
   const usuario = document.getElementById('usuarioReg').value;
