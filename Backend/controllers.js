@@ -11,6 +11,13 @@ exports.criarProduto = async (req, res) => {
   res.json(produto);
 };
 
+exports.verPerfil = (req, res) => {
+  res.json({
+    mensagem: 'Perfil recuperado com sucesso!',
+    usuario: req.user
+  });
+};
+
 exports.atualizarProduto = async (req, res) => {
   const produto = await Produto.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.json(produto);

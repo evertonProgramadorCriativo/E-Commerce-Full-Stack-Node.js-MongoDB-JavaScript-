@@ -22,6 +22,17 @@ function router() {
     <input id="senhaReg" type="password" placeholder="Senha"/><br>
     <button onclick="registrar()">Registrar</button>
   `;
+}else if (route === '#/admin') {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <h2>Administração</h2>
+  <button onclick="mostrarFormularioCriacao()">Novo Produto</button>
+  <button onclick="listarProdutos()">Listar Produtos</button>
+  <button onclick="mostrarFormularioCriacaoAdmin()">Criar Novo Admin</button>
+  <br><br>
+  <button onclick="listarUsuarios(0)">Listar Usuários Comuns</button>
+  <button onclick="listarUsuarios(1)">Listar Admins Nível 1</button>
+  `;
 }
 else {
     app.innerHTML = '<h2>Bem-vindo ao E-commerce</h2>';
@@ -45,6 +56,30 @@ function listarProdutos() {
       `).join('');
     });
 }
+
+ function listarUsuarios(nivel) {
+  const token = localStorage.getItem('token');
+
+  fetch(`http://localhost:3000/api/usuarios/${nivel}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(res => res.json())
+  .then(usuarios => {
+    const app = document.getElementById('app');
+    app.innerHTML += `<h3>Usuários Nível ${nivel}</h3>`;
+    app.innerHTML += usuarios.map(u => `
+      <p>
+        ${u.usuario} - Nível ${u.nivel}
+        <button onclick="deletarUsuario('${u._id}')">Deletar</button>
+        <button onclick="mostrarPromocaoUsuario('${u._id}', '${u.usuario}')">Promover</button>
+      </p>
+    `).join('');
+  });
+}
+
+
 function mostrarFormularioEdicao(id, nome, descricao, preco) {
   const app = document.getElementById('app');
   app.innerHTML = `
@@ -147,4 +182,80 @@ function registrar() {
   })
   .then(res => res.json())
   .then(data => alert(data.mensagem));
+}
+
+function mostrarFormularioCriacaoAdmin() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <h2>Criar Admin</h2>
+    <input id="usuarioAdmin" placeholder="Usuário"><br>
+    <input id="senhaAdmin" type="password" placeholder="Senha"><br>
+    <select id="nivelAdmin">
+      <option value="1">Admin</option>
+      <option value="2">Super Admin</option>
+    </select><br>
+    <button onclick="criarAdmin()">Criar</button>
+  `;
+}
+
+function criarAdmin() {
+  const usuario = document.getElementById('usuarioAdmin').value;
+  const senha = document.getElementById('senhaAdmin').value;
+  const nivel = parseInt(document.getElementById('nivelAdmin').value);
+
+  const token = localStorage.getItem('token');
+
+  fetch('http://localhost:3000/api/createadmin', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ usuario, senha, nivel })
+  })
+  .then(res => res.json())
+  .then(data => alert(data.mensagem));
+}
+
+function deletarUsuario(id) {
+  const token = localStorage.getItem('token');
+
+  fetch(`http://localhost:3000/api/usuarios/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.mensagem);
+    window.location.hash = '#/admin';
+  });
+}
+
+
+function mostrarPromocaoUsuario(id, usuario) {
+  const novoNivel = prompt(`Digite o novo nível para ${usuario}: (0 - comum, 1 - admin, 2 - super admin)`);
+
+  if (novoNivel !== null) {
+    promoverUsuario(id, parseInt(novoNivel));
+  }
+}
+
+function promoverUsuario(id, nivel) {
+  const token = localStorage.getItem('token');
+
+  fetch(`http://localhost:3000/api/usuarios/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ nivel })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.mensagem);
+    window.location.hash = '#/admin';
+  });
 }
