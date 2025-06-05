@@ -20,6 +20,15 @@ Este projeto simula um e-commerce completo, incluindo:
 
 ---
 
+## 📌 Descrição:
+
+- Backend completo com Express, Mongoose, JWT.
+- Níveis de usuário (cliente, admin, super admin).
+- Frontend com SPA básica e área exclusiva de administração.
+- CRUD de produtos, comentários e usuários.
+- Autenticação e autorização via JWT.
+- Preparado para expansão: carrinho de compras, pagamento Pix.
+
 ## 🛠️ Tecnologias  
 
 | Backend         | Frontend       | Banco de Dados | Outros         |  
@@ -79,15 +88,34 @@ Este projeto simula um e-commerce completo, incluindo:
 ```bash
 /ecommerce
 ├── /backend
-│   ├── app.js         # Configuração do servidor Express
-│   ├── routes.js      # Definição das rotas da API
-│   ├── controllers.js # Lógica dos endpoints
-│   └── models.js      # Modelos do MongoDB
+│   ├── app.js              # Configuração do servidor Express
+│   ├── routes.js          # Rotas da API para produtos
+│   ├── routesUser.js      # Rotas da API para usuários e admins
+│   ├── controllers.js     # Lógica dos endpoints de produtos
+│   ├── controllersUser.js # Lógica dos endpoints de usuários e admins
+│   ├── models.js          # Modelos do MongoDB (Produto, Comentário, etc.)
+│   ├── modelsUser.js      # Modelo do MongoDB para Usuário com níveis
+│   ├── authMiddleware.js  # Middleware de autenticação via JWT
+│   └── autorizarNivel.js  # Middleware de autorização por nível de usuário
 │
 ├── /frontend
-│   ├── index.html     # Página principal
-│   ├── style.css      # Estilos globais
-│   └── script.js      # Lógica frontend (carrinho, login, etc.)
+│   ├── index.html         # Página principal
+│   ├── style.css         # Estilos globais
+│   ├── script.js         # Lógica frontend (carrinho, login, admin, etc.)
+│   ├── /admin            # Páginas exclusivas do administrador
+│   │   ├── painel.html   # Painel de administração
+│   │   ├── painel.css    # Estilo do painel admin
+│   │   └── painel.js     # Lógica de CRUD de produtos/admins
+│   ├── /components       # Componentes reutilizáveis
+│   │   ├── header.html   # Cabeçalho
+│   │   └── footer.html   # Rodapé
+│   └── /pages
+│       ├── carrinho.html # Página do carrinho de compras
+│       ├── login.html    # Página de login e registro
+│       └── produtos.html # Página de listagem de produtos
 │
-├── package.json       # Dependências e scripts
-└── .gitignore         # Arquivos ignorados pelo Git   
+├── package.json          # Dependências e scripts
+├── .gitignore            # Arquivos ignorados pelo Git
+├── README.md             # Documentação do projeto
+└── .env                  # Variáveis de ambiente (como JWT_SECRET)
+  
