@@ -6,4 +6,5 @@ const UsuarioSchema = new mongoose.Schema({
   nivel: { type: Number, default: 0 }  // 0 = usuário normal, 1 = admin, 2 = super admin
 });
 
+
 module.exports = mongoose.model('Usuario', UsuarioSchema);

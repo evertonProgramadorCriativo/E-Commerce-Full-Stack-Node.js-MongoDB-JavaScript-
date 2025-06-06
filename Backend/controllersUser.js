@@ -1,13 +1,13 @@
 const Usuario = require('./models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+require('dotenv').config();
  
-const SECRET = 'dsdlskakldsjaildsaldjsajdlsajdiasjdldsa';
+const SECRET = process.env.JWT_SECRET;
 
 exports.registrarUsuario = async (req, res) => {
   const { usuario, senha, nivel } = req.body;
-
+  console.log({ usuario, senha, nivel }); // Veja se está chegando
   const senhaHash = await bcrypt.hash(senha, 10);
 
   const novoUsuario = new Usuario({
@@ -25,9 +25,9 @@ exports.registrarUsuario = async (req, res) => {
 exports.listarUsuariosPorNivel = async (req, res) => {
   const { nivel } = req.params;
 
-  const usuarios = await Usuario.find({ nivel: Number(nivel) }, 'usuario nivel');
+  const Usuario = await Usuario.find({ nivel: Number(nivel) }, 'usuario nivel');
 
-  res.json(usuarios);
+  res.json(Usuario);
 };
 
 exports.loginUsuario = async (req, res) => {

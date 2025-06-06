@@ -43,7 +43,13 @@ window.addEventListener('hashchange', router);
 window.addEventListener('load', router);
 
 function listarProdutos() {
-  fetch('http://localhost:3000/api/produtos')
+  const token = localStorage.getItem('token');
+ 
+  fetch('http://localhost:3000/api/produtos', {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
     .then(res => res.json())
     .then(produtos => {
       const div = document.getElementById('produtos');
@@ -56,6 +62,7 @@ function listarProdutos() {
       `).join('');
     });
 }
+
 
  function listarUsuarios(nivel) {
   const token = localStorage.getItem('token');
@@ -171,7 +178,7 @@ function criarProduto() {
 }
 
 
-function registrar() {
+ function registrar() {
   const usuario = document.getElementById('usuarioReg').value;
   const senha = document.getElementById('senhaReg').value;
 
@@ -184,7 +191,7 @@ function registrar() {
   .then(data => alert(data.mensagem));
 }
 
-function mostrarFormularioCriacaoAdmin() {
+ function mostrarFormularioCriacaoAdmin() {
   const app = document.getElementById('app');
   app.innerHTML = `
     <h2>Criar Admin</h2>
@@ -198,10 +205,13 @@ function mostrarFormularioCriacaoAdmin() {
   `;
 }
 
-function criarAdmin() {
+
+ function criarAdmin() {
   const usuario = document.getElementById('usuarioAdmin').value;
   const senha = document.getElementById('senhaAdmin').value;
   const nivel = parseInt(document.getElementById('nivelAdmin').value);
+
+  console.log({ usuario, senha, nivel }); 
 
   const token = localStorage.getItem('token');
 

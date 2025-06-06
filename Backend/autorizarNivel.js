@@ -1,3 +1,8 @@
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const SECRET = process.env.JWT_SECRET;
+
+
 function autorizarNivel(nivelRequerido) {
   return (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];

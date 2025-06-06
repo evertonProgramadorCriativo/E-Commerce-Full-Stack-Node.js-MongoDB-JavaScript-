@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
+const bcrypt = require('bcrypt');
+bcrypt.hash('123456', 10).then(console.log);
 
 mongoose.connect('mongodb+srv://evertonprogramadorcriativo:roqiAePQ0uVsYPNr@cluster0.wjlt5r6.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
